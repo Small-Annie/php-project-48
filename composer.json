@@ -8,7 +8,11 @@
             "email": "petr230999@gmail.com"
         }
     ],
-    "license": "MIT",    
+    "license": "MIT",
+    "bin": [
+        "bin/gendiff"
+    ],
+    
     "require": {
         "docopt/docopt": "^1.0"
     }
