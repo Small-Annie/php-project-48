@@ -1,0 +1,13 @@
+{
+    "name": "hexlet/code",
+    "type": "project",
+    "description": "hexlet generate-diff",
+    "authors": [
+        {
+            "name": "Petrova Anna",
+            "email": "petr230999@gmail.com"
+        }
+    ],
+    "license": "MIT",    
+    "require": {}
+}
