@@ -22,11 +22,19 @@ jobs:
       - name: Run linter
         run: make lint
 
-      - name: Run test & publish code coverage
+      - name: Run tests
+        run: make test
+
+      - name: Run tests with coverage
+        run: make test-coverage
+
+      - name: Run SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.php.coverage.reportPaths=build/logs/clover.xml
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          coverageCommand: make test-coverage
-          coverageLocations: build/logs/clover.xml:clover
-          debug: true
+          SONAR_PROJECT_KEY: Small-Annie_php-project-48
+          SONAR_ORGANIZATION: small-annie
