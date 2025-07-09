@@ -3,6 +3,8 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use function Php\Project\GenDiff\generateDiff;
+
 $doc = <<<'DOCOPT'
 Generate diff
 
@@ -18,3 +20,11 @@ Options:
 DOCOPT;
 
 $args = Docopt::handle($doc, ['version' => '1.0']);
+
+$firstFile = $args['<firstFile>'];
+$secondFile = $args['<secondFile>'];
+
+$firstFilePath = realpath($firstFile);
+$secondFilePath = realpath($secondFile);
+
+generateDiff($firstFilePath, $secondFilePath);
