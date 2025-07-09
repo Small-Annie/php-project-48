@@ -1,5 +1,7 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/Small-Annie/php-project-48/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Small-Annie/php-project-48/actions)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Small-Annie_php-project-48&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Small-Annie_php-project-48)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Small-Annie_php-project-48&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Small-Annie_php-project-48)
 
 # Описание
 
