@@ -32,7 +32,7 @@ function buildDiff(array $data1, array $data2): array
         $value2 = $keyExistsIn2 ? $data2[$key] : null;
 
         if ($keyExistsIn1 && !$keyExistsIn2) {
-            $diff[$key] = ['status' => 'removed', 'value' =>$value1];
+            $diff[$key] = ['status' => 'removed', 'value' => $value1];
         } elseif (!$keyExistsIn1 && $keyExistsIn2) {
             $diff[$key] = ['status' => 'added', 'value' => $value2];
         } elseif ($value1 === $value2) {
@@ -67,7 +67,7 @@ function formatDiff(array $diff): string
         }
     }
 
-    $lines[] = "}";
+    $lines[] = "}\n";
 
     return implode("\n", $lines);
 }
