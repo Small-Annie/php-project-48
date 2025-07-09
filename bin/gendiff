@@ -27,4 +27,4 @@ $secondFile = $args['<secondFile>'];
 $firstFilePath = realpath($firstFile);
 $secondFilePath = realpath($secondFile);
 
-generateDiff($firstFilePath, $secondFilePath);
+echo generateDiff($firstFilePath, $secondFilePath);
