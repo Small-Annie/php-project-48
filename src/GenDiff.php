@@ -2,13 +2,13 @@
 
 namespace Php\Project\GenDiff;
 
-use function Php\Project\Parser\parse;
+use function Php\Project\Parsers\parse;
 use function Funct\Collection\sortBy;
 
 function generateDiff(string $pathToFile1, string $pathToFile2): string
 {
-    $parsedFile1 = parse($pathToFile1);
-    $parsedFile2 = parse($pathToFile2);
+    $parsedFile1 = (array) parse($pathToFile1);
+    $parsedFile2 = (array) parse($pathToFile2);
 
     $diff = buildDiff($parsedFile1, $parsedFile2);
 

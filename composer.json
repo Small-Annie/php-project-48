@@ -15,7 +15,7 @@
     "autoload": {
         "files": [
             "src/GenDiff.php",
-            "src/Parser.php"
+            "src/Parsers.php"
         ]
     },
     "require": {
