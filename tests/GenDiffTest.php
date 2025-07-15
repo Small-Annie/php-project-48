@@ -3,6 +3,7 @@
 namespace Php\Project\GenDiff\Tests;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use function Php\Project\GenDiff\generateDiff;
 
 class GenDiffTest extends TestCase
@@ -28,12 +29,21 @@ class GenDiffTest extends TestCase
         return $content;
     }
 
-    public function testGenerateDiff(): void
+    #[DataProvider('generateDiffProvider')]
+    public function testGenerateDiff(string $argument1, string $argument2): void
     {
         $expected = $this->getFileContents('expected.diff');
-        $file1 = $this->getFixtureFullPath('file1.json');
-        $file2 = $this->getFixtureFullPath('file2.json');
+        $file1 = $this->getFixtureFullPath($argument1);
+        $file2 = $this->getFixtureFullPath($argument2);
 
         $this->assertEquals($expected, generateDiff($file1, $file2));
+    }
+
+    public static function generateDiffProvider(): array
+    {
+        return [
+            "json files" => ['file1.json', 'file2.json'],
+            "yaml files" => ['file1.yaml', 'file2.yaml'],
+        ];
     }
 }
