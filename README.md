@@ -36,7 +36,11 @@ make install
 
 # Запуск 
 
+Generate diff with json files
 [![asciicast](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF.svg)](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF)
+
+Generate diff with yaml files
+[![asciicast](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84.svg)](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84)
 
 ### License
 
