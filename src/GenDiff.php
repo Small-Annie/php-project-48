@@ -5,80 +5,81 @@ namespace Php\Project\GenDiff;
 use function Php\Project\Parsers\parse;
 use function Funct\Collection\sortBy;
 
-function generateDiff(string $pathToFile1, string $pathToFile2): string
+function generateDiff(string $firstFile, string $secondFile): array
 {
-    $parsedFile1 = (array) parse($pathToFile1);
-    $parsedFile2 = (array) parse($pathToFile2);
+    $firstFilePath = realpath($firstFile);
+    $secondFilePath = realpath($secondFile);
 
-    $diff = buildDiff($parsedFile1, $parsedFile2);
+    $firstFileParsed = parse($firstFilePath);
+    $secondFileParsed = parse($secondFilePath);
 
-    return formatDiff($diff);
+    $diff = buildDiff($firstFileParsed, $secondFileParsed);
+
+    return $diff;
 }
 
-function buildDiff(array $data1, array $data2): array
+function buildDiff(object $data1, object $data2): array
 {
     $sortedUniqueKeys = sortBy(
-        array_unique(array_merge(array_keys($data1), array_keys($data2))),
+        array_unique(
+            array_merge(
+                array_keys(get_object_vars($data1)),
+                array_keys(get_object_vars($data2))
+            )
+        ),
         fn($key) => $key
     );
 
     $diff = [];
 
     foreach ($sortedUniqueKeys as $key) {
-        $keyExistsIn1 = array_key_exists($key, $data1);
-        $keyExistsIn2 = array_key_exists($key, $data2);
+        $keyExistsIn1 = property_exists($data1, $key);
+        $keyExistsIn2 = property_exists($data2, $key);
 
-        $value1 = $keyExistsIn1 ? $data1[$key] : null;
-        $value2 = $keyExistsIn2 ? $data2[$key] : null;
+        $value1 = $keyExistsIn1 ? $data1->$key : null;
+        $value2 = $keyExistsIn2 ? $data2->$key : null;
 
-        if ($keyExistsIn1 && !$keyExistsIn2) {
-            $diff[$key] = ['status' => 'removed', 'value' => $value1];
+        if (is_object($value1) && is_object($value2)) {
+            $diff[$key] = createNode('nested', buildDiff($value1, $value2));
+        } elseif ($keyExistsIn1 && !$keyExistsIn2) {
+            $diff[$key] = createNode('removed', $value1);
         } elseif (!$keyExistsIn1 && $keyExistsIn2) {
-            $diff[$key] = ['status' => 'added', 'value' => $value2];
+            $diff[$key] = createNode('added', $value2);
         } elseif ($value1 === $value2) {
-            $diff[$key] = ['status' => 'unchanged', 'value' => $value1];
+            $diff[$key] = createNode('unchanged', $value1);
         } else {
-            $diff[$key] = ['status' => 'changed', 'oldValue' => $value1, 'newValue' => $value2];
+            $diff[$key] = createNode('changed', $value1, $value2);
         }
     }
 
     return $diff;
 }
 
-function formatDiff(array $diff): string
+function createNode(string $status, $value1, $value2 = null): array
 {
-    $lines = ['{'];
+    $node = ['status' => $status];
+    $value1 = objectToArray($value1);
+    $value2 = objectToArray($value2);
 
-    foreach ($diff as $key => $info) {
-        switch ($info['status']) {
-            case 'added':
-                $lines[] = "  + {$key}: " . formatValue($info['value']);
-                break;
-            case 'removed':
-                $lines[] = "  - {$key}: " . formatValue($info['value']);
-                break;
-            case 'unchanged':
-                $lines[] = "    {$key}: " . formatValue($info['value']);
-                break;
-            case 'changed':
-                $lines[] = "  - {$key}: " . formatValue($info['oldValue']);
-                $lines[] = "  + {$key}: " . formatValue($info['newValue']);
-                break;
-        }
+    if ($status === 'changed') {
+        $node['oldValue'] = $value1;
+        $node['newValue'] = $value2;
+    } elseif ($status === 'nested') {
+        $node['children'] = $value1;
+    } else {
+        $node['value'] = $value1;
     }
 
-    $lines[] = "}\n";
-
-    return implode("\n", $lines);
+    return $node;
 }
 
-function formatValue(mixed $value): string
+function objectToArray(mixed $data): mixed
 {
-    if (is_bool($value)) {
-        return $value ? 'true' : 'false';
+    if (is_object($data)) {
+        $data = get_object_vars($data);
     }
-    if (is_null($value)) {
-        return 'null';
+    if (is_array($data)) {
+        return array_map(fn($item) => objectToArray($item), $data);
     }
-    return $value;
+    return $data;
 }
