@@ -32,6 +32,10 @@ Features of the utility:
 make install
 ```
 
+# Запуск 
+
+[![asciicast](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF.svg)](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF)
+
 ### License
 
 MIT
