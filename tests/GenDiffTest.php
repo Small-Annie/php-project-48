@@ -2,48 +2,27 @@
 
 namespace Php\Project\GenDiff\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Php\Project\Tests\BaseTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use function Php\Project\GenDiff\generateDiff;
 
-class GenDiffTest extends TestCase
+class GenDiffTest extends BaseTestCase
 {
-    public function getFixtureFullPath(string $fixtureName): string
-    {
-        $parts = [__DIR__, 'fixtures', $fixtureName];
-        $fullPath = realpath(implode(DIRECTORY_SEPARATOR, $parts));
-
-        if ($fullPath === false) {
-            throw new \RuntimeException("File not found: " . implode('/', $parts));
-        }
-
-        return $fullPath;
-    }
-
-    public function getFileContents(string $fixtureName): string
-    {
-        $content = file_get_contents($this->getFixtureFullPath($fixtureName));
-        if ($content === false) {
-            throw new \RuntimeException("Failed to read the file: " . $fixtureName);
-        }
-        return $content;
-    }
-
     #[DataProvider('generateDiffProvider')]
-    public function testGenerateDiff(string $argument1, string $argument2): void
+    public function testGenerateDiff(string $expected, string $argument1, string $argument2): void
     {
-        $expected = $this->getFileContents('expected.diff');
+        $expectedDiff = $this->getFileContents($expected);
         $file1 = $this->getFixtureFullPath($argument1);
         $file2 = $this->getFixtureFullPath($argument2);
 
-        $this->assertEquals($expected, generateDiff($file1, $file2));
+        $this->assertEquals($expectedDiff, json_encode(generateDiff($file1, $file2), JSON_PRETTY_PRINT));
     }
 
     public static function generateDiffProvider(): array
     {
         return [
-            "json files" => ['file1.json', 'file2.json'],
-            "yaml files" => ['file1.yaml', 'file2.yaml'],
+            "json files" => ['diff.json', 'file1.json', 'file2.json'],
+            "yaml files" => ['diff.json', 'file1.yaml', 'file2.yaml'],
         ];
     }
 }

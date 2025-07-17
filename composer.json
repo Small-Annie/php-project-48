@@ -18,6 +18,11 @@
             "src/Parsers.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Php\\Project\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "docopt/docopt": "^1.0",
         "funct/funct": "^1.6",
