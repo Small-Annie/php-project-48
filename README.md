@@ -10,7 +10,7 @@
 Возможности утилиты:
 
 * Поддержка разных входных форматов: yaml и json
-* Генерация отчета в виде plain text, stylish и json
+* Генерация отчета в виде stylish (по умолчанию), plain text и json
 
 # Description
 
@@ -19,8 +19,7 @@
 Features of the utility:
 
 * Supports multiple input formats: YAML and JSON
-* Generates a report in plain text, stylish, and JSON formats
-
+* Generates a report in stylish (default), plain text, and JSON formats
 # Требования \ Requirements
 
 * Mac / Linux
@@ -36,11 +35,14 @@ make install
 
 # Запуск 
 
-Generate diff with json files
+Generate diff for JSON files (flat arrays)
 [![asciicast](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF.svg)](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF)
 
-Generate diff with yaml files
+Generate diff for YAML files (flat arrays)
 [![asciicast](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84.svg)](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84)
+
+Generate diff for JSON and YAML files (nested arrays)
+[![asciicast](https://asciinema.org/a/D5FFtYBao7L3sF7NzlUkQM6Pi.svg)](https://asciinema.org/a/D5FFtYBao7L3sF7NzlUkQM6Pi)
 
 ### License
 
