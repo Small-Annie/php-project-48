@@ -41,8 +41,11 @@ Generate diff for JSON files (flat arrays)
 Generate diff for YAML files (flat arrays)
 [![asciicast](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84.svg)](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84)
 
-Generate diff for JSON and YAML files (nested arrays)
+Generate diff for JSON and YAML files in stylish format (nested arrays)
 [![asciicast](https://asciinema.org/a/D5FFtYBao7L3sF7NzlUkQM6Pi.svg)](https://asciinema.org/a/D5FFtYBao7L3sF7NzlUkQM6Pi)
+
+Generate diff for JSON and YAML files in plain text format
+[![asciicast](https://asciinema.org/a/TyLyCVBDIOMnl9UTHZl1Zlslk.svg)](https://asciinema.org/a/TyLyCVBDIOMnl9UTHZl1Zlslk)
 
 ### License
 
