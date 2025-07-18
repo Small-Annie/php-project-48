@@ -56,7 +56,7 @@ function buildDiff(object $data1, object $data2): array
 function createNode(string $key, string $status, $value1, $value2 = null): array
 {
     $node = ['key' => $key, 'status' => $status];
-    
+
     $value1 = convertObjects($value1);
     $value2 = convertObjects($value2);
 
