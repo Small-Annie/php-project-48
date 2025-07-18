@@ -14,7 +14,7 @@
     ],
     "autoload": {
         "files": [
-            "src/GenDiff.php",
+            "src/Differ.php",
             "src/Parsers.php",
             "src/Formatters.php",
             "src/Formatters/Stylish.php"
@@ -22,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Php\\Project\\Tests\\": "tests/"
+            "Differ\\Tests\\": "tests/"
         }
     },
     "require": {

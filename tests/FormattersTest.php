@@ -1,10 +1,10 @@
 <?php
 
-namespace Php\Project\Formatters\Tests;
+namespace Differ\Differ\Formatters\Tests;
 
-use Php\Project\Tests\BaseTestCase;
+use Differ\Tests\BaseTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use function Php\Project\Formatters\formatDiff;
+use function Differ\Formatters\formatDiff;
 
 class FormattersTest extends BaseTestCase
 {

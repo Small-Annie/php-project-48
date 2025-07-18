@@ -1,6 +1,6 @@
 <?php
 
-namespace Php\Project\Formatters\Stylish;
+namespace Differ\Formatters\Stylish;
 
 function formatStylish(array $diff, int $depth = 1, string $indent = '    '): string
 {

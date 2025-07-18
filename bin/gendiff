@@ -3,8 +3,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use function Php\Project\Formatters\formatDiff;
-use function Php\Project\GenDiff\generateDiff;
+use function Differ\Differ\genDiff;
 
 $doc = <<<'DOCOPT'
 Generate diff
@@ -24,8 +23,10 @@ $args = Docopt::handle($doc, ['version' => '1.0']);
 
 $firstFile = $args['<firstFile>'];
 $secondFile = $args['<secondFile>'];
-$format = $args['--format'];
+$formatName = $args['--format'];
 
-$diff = generateDiff($firstFile, $secondFile); #
+$pathToFile1 = realpath($firstFile);
+$pathToFile2 = realpath($secondFile);
 
-echo formatDiff($diff, $format); #
+$diff = genDiff($pathToFile1, $pathToFile2, $formatName);
+print_r($diff);

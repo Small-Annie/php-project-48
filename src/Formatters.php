@@ -1,8 +1,8 @@
 <?php
 
-namespace Php\Project\Formatters;
+namespace Differ\Formatters;
 
-use function Php\Project\Formatters\Stylish\formatStylish;
+use function Differ\Formatters\Stylish\formatStylish;
 
 function formatDiff(array $diff, string $format = 'stylish'): string
 {

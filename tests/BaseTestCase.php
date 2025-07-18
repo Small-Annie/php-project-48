@@ -1,6 +1,6 @@
 <?php
 
-namespace Php\Project\Tests;
+namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 
