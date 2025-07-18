@@ -9,11 +9,11 @@ use function Differ\Formatters\formatDiff;
 class FormattersTest extends BaseTestCase
 {
     #[DataProvider('formatDiffProvider')]
-    public function testFormatDiff(string $expected, string $argument): void
+    public function testFormatDiff(string $expected, string $argument, string $format = 'stylish'): void
     {
         $expectedFormat = $this->getFileContents($expected);
         $diffContent = json_decode($this->getFileContents($argument), true);
-        $actualFormat = formatDiff($diffContent);
+        $actualFormat = formatDiff($diffContent, $format);
 
         $this->assertEquals($expectedFormat, $actualFormat);
     }
@@ -22,6 +22,7 @@ class FormattersTest extends BaseTestCase
     {
         return [
             "stylish" => ['diffFormat.stylish', 'diff.json'],
+            "plain" => ['diffFormat.plain', 'diff.json', 'plain']
         ];
     }
 }

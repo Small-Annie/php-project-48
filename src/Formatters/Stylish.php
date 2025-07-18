@@ -2,62 +2,63 @@
 
 namespace Differ\Formatters\Stylish;
 
-function formatStylish(array $diff, int $depth = 1, string $indent = '    '): string
+function formatStylish(array $diff): string
 {
-    $lines = [];
-    $currentIndent = str_repeat($indent, $depth);
-    $prefixIndent = substr($currentIndent, 0, -2);
-    $closingIndent = str_repeat($indent, $depth - 1);
+    $indent = '    ';
+    $iter = function (array $node, int $depth) use (&$iter, $indent): array {
+        $currentIndent = str_repeat($indent, $depth);
+        $prefixIndent = substr($currentIndent, 0, -2);
 
-    foreach ($diff as $key => $info) {
-        switch ($info['status']) {
-            case 'added':
-                $lines[] = "{$prefixIndent}+ {$key}: " . toString($info['value'], $depth, $indent);
-                break;
-            case 'removed':
-                $lines[] = "{$prefixIndent}- {$key}: " . toString($info['value'], $depth, $indent);
-                break;
-            case 'unchanged':
-                $lines[] = "{$currentIndent}{$key}: " . toString($info['value'], $depth, $indent);
-                break;
-            case 'changed':
-                $lines[] = "{$prefixIndent}- {$key}: " . toString($info['oldValue'], $depth, $indent);
-                $lines[] = "{$prefixIndent}+ {$key}: " . toString($info['newValue'], $depth, $indent);
-                break;
-            case 'nested':
-                $lines[] = "{$currentIndent}{$key}: " . formatStylish($info['children'], $depth + 1, $indent);
-                break;
-        }
-    }
+        return array_map(function ($item) use ($iter, $depth, $currentIndent, $prefixIndent) {
+            $key = $item['key'];
 
-    return "{\n" . implode("\n", $lines) . "\n{$closingIndent}}";
+            switch ($item['status']) {
+                case 'added':
+                    return "{$prefixIndent}+ {$key}: " . toString($item['value'], $depth);
+                case 'removed':
+                    return "{$prefixIndent}- {$key}: " . toString($item['value'], $depth);
+                case 'unchanged':
+                    return "{$currentIndent}{$key}: " . toString($item['value'], $depth);
+                case 'changed':
+                    return "{$prefixIndent}- {$key}: " . toString($item['oldValue'], $depth)
+                         . "\n"
+                         . "{$prefixIndent}+ {$key}: " . toString($item['newValue'], $depth);
+                case 'nested':
+                    $childrenLines = $iter($item['children'], $depth + 1);
+                    $childrenString = implode("\n", $childrenLines);
+                    return "{$currentIndent}{$key}: {\n{$childrenString}\n{$currentIndent}}";
+                default:
+                    return '';
+            }
+        }, $node);
+    };
+
+    $lines = $iter($diff, 1);
+    return "{\n" . implode("\n", $lines) . "\n}";
 }
 
-function toString(mixed $value, int $depth = 1, string $indent = '    '): string
+function toString(mixed $value, int $depth = 1): string
 {
-    if (is_array($value)) {
-        return stringify($value, $depth, $indent);
-    }
-    if (is_bool($value)) {
-        return $value ? 'true' : 'false';
-    }
-    if (is_null($value)) {
-        return 'null';
-    }
-    return trim(var_export($value, true), "'");
+    return match (true) {
+        is_array($value) => stringify($value, $depth),
+        is_bool($value) => $value ? 'true' : 'false',
+        is_null($value) => 'null',
+        default => trim(var_export($value, true), "'"),
+    };
 }
 
-function stringify(array $value, int $depth = 1, string $indent = '    '): string
+function stringify(array $value, int $depth = 1): string
 {
+    $indent = '    ';
     $iter = function ($currentValue, $depth) use (&$iter, $indent) {
         $currentIndent = str_repeat($indent, $depth);
         $nestedIndent = str_repeat($indent, $depth + 1);
         $lines = array_map(
-            function ($key, $val) use ($iter, $depth, $indent, $nestedIndent) {
+            function ($key, $val) use ($iter, $depth, $nestedIndent) {
                 if (is_array($val)) {
                     return "{$nestedIndent}{$key}: " . $iter($val, $depth + 1);
                 }
-                return "{$nestedIndent}{$key}: " . toString($val, $depth, $indent);
+                return "{$nestedIndent}{$key}: " . toString($val, $depth);
             },
             array_keys($currentValue),
             $currentValue
