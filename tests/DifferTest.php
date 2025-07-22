@@ -14,18 +14,18 @@ class DifferTest extends BaseTestCase
     #[DataProvider('buildDiffProvider')]
     public function testBuildDiff(string $expected, string $argument1, string $argument2): void
     {
-        $expectedDiff = $this->getFileContents($expected);
+        $expectedDiff = include $this->getFixtureFullPath($expected);
         $file1 = parse($this->getFixtureFullPath($argument1));
         $file2 = parse($this->getFixtureFullPath($argument2));
 
-        $this->assertEquals($expectedDiff, json_encode(buildDiff($file1, $file2), JSON_PRETTY_PRINT));
+        $this->assertEquals($expectedDiff, buildDiff($file1, $file2));
     }
 
     public static function buildDiffProvider(): array
     {
         return [
-            "json files" => ['diff.json', 'file1.json', 'file2.json'],
-            "yaml files" => ['diff.json', 'file1.yaml', 'file2.yaml'],
+            "json files" => ['diff.php', 'file1.json', 'file2.json'],
+            "yaml files" => ['diff.php', 'file1.yaml', 'file2.yaml'],
         ];
     }
 }
