@@ -1,5 +1,6 @@
 install:
 	composer install
+	chmod +x bin/gendiff
 
 lint:
 	composer exec --verbose phpcs -- --standard=PSR12 src bin

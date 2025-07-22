@@ -4,6 +4,7 @@ namespace Differ\Differ\Formatters\Tests;
 
 use Differ\Tests\BaseTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 use function Differ\Formatters\formatDiff;
 
 class FormattersTest extends BaseTestCase

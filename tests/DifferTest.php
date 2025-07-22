@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use function Differ\Differ\buildDiff;
 use function Differ\Parsers\parse;
 
-
 class DifferTest extends BaseTestCase
 {
     #[DataProvider('buildDiffProvider')]

@@ -5,18 +5,18 @@
 
 # Описание
 
-"Вычислитель отличий" – программа, определяющая разницу между двумя структурами данных. Это популярная задача, для решения которой существует множество онлайн-сервисов, например: http://www.jsondiff.com/. Подобный механизм используется при выводе тестов или при автоматическом отслеживании изменении в конфигурационных файлах.
+"Вычислитель отличий" – программа, определяющая разницу между двумя структурами данных.
 
-Возможности утилиты:
+Возможности CLI утилиты:
 
-* Поддержка разных входных форматов: yaml и json
-* Генерация отчета в виде stylish (по умолчанию), plain text и json
+* Поддержка разных входных форматов: YAML и JSON
+* Генерация отчёта в виде stylish (по умолчанию), plain text и JSON
 
 # Description
 
-"Differ" is a program that generates a diff between two data structures. This is a common task, and many online services, such as http://www.jsondiff.com/, offer similar functionality. The tool is useful for displaying test results or automatically tracking changes in configuration files.
+"Differ" is a program that generates a diff between two data structures.
 
-Features of the utility:
+Features of the CLI utility:
 
 * Supports multiple input formats: YAML and JSON
 * Generates a report in stylish (default), plain text, and JSON formats
@@ -38,7 +38,7 @@ cd php-project-48
 make install
 ```
 
-# Примеры использования / Usage examples
+# Примеры использования \ Usage examples
 
 Generate diff for JSON files in stylish format (flat arrays)
 [![asciicast](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF.svg)](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF)
