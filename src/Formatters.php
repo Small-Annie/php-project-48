@@ -2,18 +2,16 @@
 
 namespace Differ\Formatters;
 
-use function Differ\Formatters\Stylish\formatStylish;
-use function Differ\Formatters\Plain\formatPlain;
-use function Differ\Formatters\Json\formatJson;
+use function Differ\Formatters\Stylish\formatDiffToStylish;
+use function Differ\Formatters\Plain\formatDiffToPlain;
+use function Differ\Formatters\Json\formatDiffToJson;
 
 function formatDiff(array $diff, string $format = 'stylish'): string
 {
-
-    $formattedOutput = match ($format) {
-        'stylish' => formatStylish($diff),
-        'plain' => formatPlain($diff),
-        'json' => formatJson($diff),
-        default => throw new \Exception("Unknown format: {$format}"),
+    return match ($format) {
+        'stylish' => formatDiffToStylish($diff),
+        'plain' => formatDiffToPlain($diff),
+        'json' => formatDiffToJson($diff),
+        default => throw new \InvalidArgumentException("Unknown format: {$format}"),
     };
-    return $formattedOutput;
 }

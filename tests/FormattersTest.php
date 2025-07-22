@@ -9,13 +9,13 @@ use function Differ\Formatters\formatDiff;
 class FormattersTest extends BaseTestCase
 {
     #[DataProvider('formatDiffProvider')]
-    public function testFormatDiff(string $expected, string $argument, string $format = 'stylish'): void
+    public function testFormatDiff(string $expectedFormattedFile, string $diffFile, string $format = 'stylish'): void
     {
-        $expectedFormat = $this->getFileContents($expected);
-        $diffContent = include $this->getFixtureFullPath($argument);
-        $actualFormat = formatDiff($diffContent, $format);
+        $expectedFormattedContent = $this->getFileContents($expectedFormattedFile);
+        $diffContent = include $this->getFixtureFullPath($diffFile);
+        $actualFormattedContent = formatDiff($diffContent, $format);
 
-        $this->assertEquals($expectedFormat, $actualFormat);
+        $this->assertEquals($expectedFormattedContent, $actualFormattedContent);
     }
 
     public static function formatDiffProvider(): array

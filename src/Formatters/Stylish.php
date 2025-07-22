@@ -2,7 +2,7 @@
 
 namespace Differ\Formatters\Stylish;
 
-function formatStylish(array $diff): string
+function formatDiffToStylish(array $diff): string
 {
     $indent = '    ';
     $iter = function (array $node, int $depth) use (&$iter, $indent): array {
@@ -11,30 +11,43 @@ function formatStylish(array $diff): string
 
         return array_map(function ($item) use ($iter, $depth, $currentIndent, $prefixIndent) {
             $key = $item['key'];
+            $formattedLine = '';
 
             switch ($item['status']) {
                 case 'added':
-                    return "{$prefixIndent}+ {$key}: " . toString($item['value'], $depth);
+                    $valueStr = toString($item['value'], $depth);
+                    $formattedLine = "{$prefixIndent}+ {$key}: {$valueStr}";
+                    break;
                 case 'removed':
-                    return "{$prefixIndent}- {$key}: " . toString($item['value'], $depth);
+                    $valueStr = toString($item['value'], $depth);
+                    $formattedLine = "{$prefixIndent}- {$key}: {$valueStr}";
+                    break;
                 case 'unchanged':
-                    return "{$currentIndent}{$key}: " . toString($item['value'], $depth);
+                    $valueStr = toString($item['value'], $depth);
+                    $formattedLine = "{$currentIndent}{$key}: {$valueStr}";
+                    break;
                 case 'changed':
-                    return "{$prefixIndent}- {$key}: " . toString($item['oldValue'], $depth)
-                         . "\n"
-                         . "{$prefixIndent}+ {$key}: " . toString($item['newValue'], $depth);
+                    $oldValueStr = toString($item['oldValue'], $depth);
+                    $newValueStr = toString($item['newValue'], $depth);
+                    $removedLine = "{$prefixIndent}- {$key}: {$oldValueStr}";
+                    $addedLine = "{$prefixIndent}+ {$key}: {$newValueStr}";
+                    $formattedLine = "{$removedLine}\n{$addedLine}";
+                    break;
                 case 'nested':
                     $childrenLines = $iter($item['children'], $depth + 1);
-                    $childrenString = implode("\n", $childrenLines);
-                    return "{$currentIndent}{$key}: {\n{$childrenString}\n{$currentIndent}}";
+                    $childrenStr = implode("\n", $childrenLines);
+                    $formattedLine = "{$currentIndent}{$key}: {\n{$childrenStr}\n{$currentIndent}}";
+                    break;
                 default:
-                    return '';
+                    throw new \InvalidArgumentException("Unknown status '{$item['status']}' for key '{$key}'");
             }
+            return $formattedLine;
         }, $node);
     };
 
     $lines = $iter($diff, 1);
-    return "{\n" . implode("\n", $lines) . "\n}";
+    $linesString = implode("\n", $lines);
+    return "{\n{$linesString}\n}";
 }
 
 function toString(mixed $value, int $depth = 1): string
@@ -56,9 +69,11 @@ function stringify(array $value, int $depth = 1): string
         $lines = array_map(
             function ($key, $val) use ($iter, $depth, $nestedIndent) {
                 if (is_array($val)) {
-                    return "{$nestedIndent}{$key}: " . $iter($val, $depth + 1);
+                    $nestedStr = $iter($val, $depth + 1);
+                    return "{$nestedIndent}{$key}: {$nestedStr}";
                 }
-                return "{$nestedIndent}{$key}: " . toString($val, $depth);
+                $valStr = toString($val, $depth);
+                return "{$nestedIndent}{$key}: {$valStr}";
             },
             array_keys($currentValue),
             $currentValue

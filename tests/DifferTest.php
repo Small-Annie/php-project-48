@@ -12,11 +12,11 @@ use function Differ\Parsers\parse;
 class DifferTest extends BaseTestCase
 {
     #[DataProvider('buildDiffProvider')]
-    public function testBuildDiff(string $expected, string $argument1, string $argument2): void
+    public function testBuildDiff(string $expectedDiffFile, string $firstFile, string $secondFile): void
     {
-        $expectedDiff = include $this->getFixtureFullPath($expected);
-        $file1 = parse($this->getFixtureFullPath($argument1));
-        $file2 = parse($this->getFixtureFullPath($argument2));
+        $expectedDiff = include $this->getFixtureFullPath($expectedDiffFile);
+        $file1 = parse($this->getFixtureFullPath($firstFile));
+        $file2 = parse($this->getFixtureFullPath($secondFile));
 
         $this->assertEquals($expectedDiff, buildDiff($file1, $file2));
     }

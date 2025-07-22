@@ -28,45 +28,45 @@ function buildDiff(object $data1, object $data2): array
         fn($key) => $key
     );
 
-    $diff = [];
+    return array_reduce(
+        $sortedUniqueKeys,
+        function (array $diff, string $key) use ($data1, $data2): array {
+            $hasKeyInData1 = property_exists($data1, $key);
+            $hasKeyInData2 = property_exists($data2, $key);
 
-    foreach ($sortedUniqueKeys as $key) {
-        $keyExistsIn1 = property_exists($data1, $key);
-        $keyExistsIn2 = property_exists($data2, $key);
+            $value1 = $hasKeyInData1 ? $data1->$key : null;
+            $value2 = $hasKeyInData2 ? $data2->$key : null;
 
-        $value1 = $keyExistsIn1 ? $data1->$key : null;
-        $value2 = $keyExistsIn2 ? $data2->$key : null;
+            $node = match (true) {
+                is_object($value1) && is_object($value2) => createNode($key, 'nested', buildDiff($value1, $value2)),
+                $hasKeyInData1 && !$hasKeyInData2 => createNode($key, 'removed', $value1),
+                !$hasKeyInData1 && $hasKeyInData2 => createNode($key, 'added', $value2),
+                $value1 === $value2 => createNode($key, 'unchanged', $value1),
+                default => createNode($key, 'changed', $value1, $value2),
+            };
 
-        if (is_object($value1) && is_object($value2)) {
-            $diff[] = createNode($key, 'nested', buildDiff($value1, $value2));
-        } elseif ($keyExistsIn1 && !$keyExistsIn2) {
-            $diff[] = createNode($key, 'removed', $value1);
-        } elseif (!$keyExistsIn1 && $keyExistsIn2) {
-            $diff[] = createNode($key, 'added', $value2);
-        } elseif ($value1 === $value2) {
-            $diff[] = createNode($key, 'unchanged', $value1);
-        } else {
-            $diff[] = createNode($key, 'changed', $value1, $value2);
-        }
-    }
+            $diff[] = $node;
 
-    return $diff;
+            return $diff;
+        },
+        []
+    );
 }
 
-function createNode(string $key, string $status, $value1, $value2 = null): array
+function createNode(string $key, string $status, mixed $value1, mixed $value2 = null): array
 {
     $node = ['key' => $key, 'status' => $status];
 
     $value1 = convertObjects($value1);
     $value2 = convertObjects($value2);
 
-    $valueFields = match ($status) {
+    $nodeValues = match ($status) {
         'changed' => ['oldValue' => $value1, 'newValue' => $value2],
         'nested' => ['children' => $value1],
         default => ['value' => $value1],
     };
 
-    $node += $valueFields;
+    $node += $nodeValues;
 
     return $node;
 }
