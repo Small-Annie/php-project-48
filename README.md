@@ -14,7 +14,7 @@
 
 # Description
 
-"Generate Diff" is a program that generates a diff between two data structures. This is a common task, and many online services, such as http://www.jsondiff.com/, offer similar functionality. The tool is useful for displaying test results or automatically tracking changes in configuration files.
+"Differ" is a program that generates a diff between two data structures. This is a common task, and many online services, such as http://www.jsondiff.com/, offer similar functionality. The tool is useful for displaying test results or automatically tracking changes in configuration files.
 
 Features of the utility:
 
@@ -26,19 +26,24 @@ Features of the utility:
 * Mac / Linux
 * Php ^8.3
 * Composer
+* Make
+* Xdebug (требуется для генерации отчёта покрытия тестов)
 
-# Установка зависимостей \ To install dependencies
+# Установка и настройка \ Installation and setup
 
 ```
+git clone git@github.com:Small-Annie/php-project-48.git
+cd php-project-48
+
 make install
 ```
 
-# Примеры использования 
+# Примеры использования / Usage examples
 
-Generate diff for JSON files (flat arrays)
+Generate diff for JSON files in stylish format (flat arrays)
 [![asciicast](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF.svg)](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF)
 
-Generate diff for YAML files (flat arrays)
+Generate diff for YAML files in stylish format (flat arrays)
 [![asciicast](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84.svg)](https://asciinema.org/a/jak30kQ4amtS4PHox4JAapn84)
 
 Generate diff for JSON and YAML files in stylish format (nested arrays)

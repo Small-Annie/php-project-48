@@ -52,6 +52,7 @@ function formatValue(mixed $value): string
     return match (true) {
         is_array($value) => '[complex value]',
         is_bool($value) => $value ? 'true' : 'false',
+        is_int($value) || is_float($value) => (string) $value,
         is_null($value) => 'null',
         default => "'{$value}'",
     };
