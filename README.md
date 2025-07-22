@@ -20,20 +20,20 @@ Features of the utility:
 
 * Supports multiple input formats: YAML and JSON
 * Generates a report in stylish (default), plain text, and JSON formats
+
 # Требования \ Requirements
 
 * Mac / Linux
 * Php ^8.3
 * Composer
 
-# Установка
+# Установка зависимостей \ To install dependencies
 
 ```
-// to install dependencies
 make install
 ```
 
-# Запуск 
+# Примеры использования 
 
 Generate diff for JSON files (flat arrays)
 [![asciicast](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF.svg)](https://asciinema.org/a/5kqr8nqR0ivqbWVhmHkxaUjDF)
@@ -46,6 +46,9 @@ Generate diff for JSON and YAML files in stylish format (nested arrays)
 
 Generate diff for JSON and YAML files in plain text format
 [![asciicast](https://asciinema.org/a/TyLyCVBDIOMnl9UTHZl1Zlslk.svg)](https://asciinema.org/a/TyLyCVBDIOMnl9UTHZl1Zlslk)
+
+Generate diff for JSON and YAML files in JSON format
+[![asciicast](https://asciinema.org/a/HOjjzFEX3cVIetODF8zFW6KFT.svg)](https://asciinema.org/a/HOjjzFEX3cVIetODF8zFW6KFT)
 
 ### License
 
