@@ -10,7 +10,6 @@ function formatDiffToPlain(array $diff): string
         return array_map(function ($item) use ($iter, $parentPath) {
             $key = $item['key'];
             $propertyPath = $parentPath === '' ? $key : "{$parentPath}.{$key}";
-            $formattedLine = '';
 
             switch ($item['status']) {
                 case 'added':
@@ -44,7 +43,7 @@ function formatDiffToPlain(array $diff): string
     };
 
     $lines = flattenAll($iter($diff));
-    return implode("\n", array_filter($lines));
+    return implode("\n", array_filter($lines, fn($line) => $line !== ''));
 }
 
 function formatValue(mixed $value): string

@@ -11,7 +11,6 @@ function formatDiffToStylish(array $diff): string
 
         return array_map(function ($item) use ($iter, $depth, $currentIndent, $prefixIndent) {
             $key = $item['key'];
-            $formattedLine = '';
 
             switch ($item['status']) {
                 case 'added':

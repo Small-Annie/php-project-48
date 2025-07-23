@@ -45,9 +45,7 @@ function buildDiff(object $data1, object $data2): array
                 default => createNode($key, 'changed', $value1, $value2),
             };
 
-            $diff[] = $node;
-
-            return $diff;
+            return [...$diff, $node];
         },
         []
     );
@@ -55,8 +53,6 @@ function buildDiff(object $data1, object $data2): array
 
 function createNode(string $key, string $status, mixed $value1, mixed $value2 = null): array
 {
-    $node = ['key' => $key, 'status' => $status];
-
     $value1 = convertObjects($value1);
     $value2 = convertObjects($value2);
 
@@ -66,9 +62,10 @@ function createNode(string $key, string $status, mixed $value1, mixed $value2 = 
         default => ['value' => $value1],
     };
 
-    $node += $nodeValues;
-
-    return $node;
+    return array_merge(
+        ['key' => $key, 'status' => $status],
+        $nodeValues
+    );
 }
 
 function convertObjects(mixed $data): mixed
