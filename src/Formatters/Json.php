@@ -4,5 +4,9 @@ namespace Differ\Formatters\Json;
 
 function formatDiffToJson(array $diff): string
 {
-    return json_encode($diff, JSON_PRETTY_PRINT);
+    $json = json_encode($diff, JSON_PRETTY_PRINT);
+    if ($json === false) {
+        throw new \RuntimeException('JSON encoding failed: ' . json_last_error_msg());
+    }
+    return $json;
 }

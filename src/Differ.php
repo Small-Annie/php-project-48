@@ -53,13 +53,13 @@ function buildDiff(object $data1, object $data2): array
 
 function createNode(string $key, string $status, mixed $value1, mixed $value2 = null): array
 {
-    $value1 = convertObjects($value1);
-    $value2 = convertObjects($value2);
+    $normalizedValue1 = convertObjects($value1);
+    $normalizedValue2 = convertObjects($value2);
 
     $nodeValues = match ($status) {
-        'changed' => ['oldValue' => $value1, 'newValue' => $value2],
-        'nested' => ['children' => $value1],
-        default => ['value' => $value1],
+        'changed' => ['oldValue' => $normalizedValue1, 'newValue' => $normalizedValue2],
+        'nested' => ['children' => $normalizedValue1],
+        default => ['value' => $normalizedValue1],
     };
 
     return array_merge(
