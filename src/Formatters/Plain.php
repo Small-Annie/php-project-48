@@ -4,6 +4,12 @@ namespace Differ\Formatters\Plain;
 
 use function Funct\Collection\flattenAll;
 
+use const Differ\Differ\DIFF_STATUS_ADDED;
+use const Differ\Differ\DIFF_STATUS_REMOVED;
+use const Differ\Differ\DIFF_STATUS_UNCHANGED;
+use const Differ\Differ\DIFF_STATUS_CHANGED;
+use const Differ\Differ\DIFF_STATUS_NESTED;
+
 function formatDiffToPlain(array $diff): string
 {
     $iter = function (array $node, string $parentPath = '') use (&$iter): array {
@@ -12,26 +18,26 @@ function formatDiffToPlain(array $diff): string
             $propertyPath = $parentPath === '' ? $key : "{$parentPath}.{$key}";
 
             switch ($item['status']) {
-                case 'added':
+                case DIFF_STATUS_ADDED:
                     $value = formatValue($item['value']);
                     $formattedLine = "Property '{$propertyPath}' was added with value: {$value}";
                     break;
 
-                case 'removed':
+                case DIFF_STATUS_REMOVED:
                     $formattedLine = "Property '{$propertyPath}' was removed";
                     break;
 
-                case 'changed':
+                case DIFF_STATUS_CHANGED:
                     $oldValue = formatValue($item['oldValue']);
                     $newValue = formatValue($item['newValue']);
                     $formattedLine = "Property '{$propertyPath}' was updated. From {$oldValue} to {$newValue}";
                     break;
 
-                case 'nested':
+                case DIFF_STATUS_NESTED:
                     $formattedLine = $iter($item['children'], $propertyPath);
                     break;
 
-                case 'unchanged':
+                case DIFF_STATUS_UNCHANGED:
                     $formattedLine = [];
                     break;
 

@@ -6,6 +6,13 @@ use function Differ\Parsers\parse;
 use function Differ\Formatters\formatDiff;
 use function Funct\Collection\sortBy;
 
+const DIFF_STATUS_ADDED = 'added';
+const DIFF_STATUS_REMOVED = 'removed';
+const DIFF_STATUS_UNCHANGED = 'unchanged';
+const DIFF_STATUS_CHANGED = 'changed';
+const DIFF_STATUS_NESTED = 'nested';
+
+
 function genDiff(string $path1, string $path2, string $format = 'stylish'): string
 {
     $parsedFile1 = parse($path1);
@@ -38,11 +45,32 @@ function buildDiff(object $data1, object $data2): array
             $value2 = $hasKeyInData2 ? $data2->$key : null;
 
             $node = match (true) {
-                is_object($value1) && is_object($value2) => createNode($key, 'nested', buildDiff($value1, $value2)),
-                $hasKeyInData1 && !$hasKeyInData2 => createNode($key, 'removed', $value1),
-                !$hasKeyInData1 && $hasKeyInData2 => createNode($key, 'added', $value2),
-                $value1 === $value2 => createNode($key, 'unchanged', $value1),
-                default => createNode($key, 'changed', $value1, $value2),
+                is_object($value1) && is_object($value2) => createNode(
+                    $key,
+                    DIFF_STATUS_NESTED,
+                    buildDiff($value1, $value2)
+                ),
+                $hasKeyInData1 && !$hasKeyInData2 => createNode(
+                    $key,
+                    DIFF_STATUS_REMOVED,
+                    $value1
+                ),
+                !$hasKeyInData1 && $hasKeyInData2 => createNode(
+                    $key,
+                    DIFF_STATUS_ADDED,
+                    $value2
+                ),
+                $value1 === $value2 => createNode(
+                    $key,
+                    DIFF_STATUS_UNCHANGED,
+                    $value1
+                ),
+                default => createNode(
+                    $key,
+                    DIFF_STATUS_CHANGED,
+                    $value1,
+                    $value2
+                ),
             };
 
             return [...$diff, $node];
@@ -57,8 +85,8 @@ function createNode(string $key, string $status, mixed $value1, mixed $value2 = 
     $normalizedValue2 = convertObjects($value2);
 
     $nodeValues = match ($status) {
-        'changed' => ['oldValue' => $normalizedValue1, 'newValue' => $normalizedValue2],
-        'nested' => ['children' => $normalizedValue1],
+        DIFF_STATUS_CHANGED => ['oldValue' => $normalizedValue1, 'newValue' => $normalizedValue2],
+        DIFF_STATUS_NESTED => ['children' => $normalizedValue1],
         default => ['value' => $normalizedValue1],
     };
 

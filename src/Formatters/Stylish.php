@@ -2,6 +2,12 @@
 
 namespace Differ\Formatters\Stylish;
 
+use const Differ\Differ\DIFF_STATUS_ADDED;
+use const Differ\Differ\DIFF_STATUS_REMOVED;
+use const Differ\Differ\DIFF_STATUS_UNCHANGED;
+use const Differ\Differ\DIFF_STATUS_CHANGED;
+use const Differ\Differ\DIFF_STATUS_NESTED;
+
 function formatDiffToStylish(array $diff): string
 {
     $indent = '    ';
@@ -13,26 +19,26 @@ function formatDiffToStylish(array $diff): string
             $key = $item['key'];
 
             switch ($item['status']) {
-                case 'added':
+                case DIFF_STATUS_ADDED:
                     $valueStr = toString($item['value'], $depth);
                     $formattedLine = "{$prefixIndent}+ {$key}: {$valueStr}";
                     break;
-                case 'removed':
+                case DIFF_STATUS_REMOVED:
                     $valueStr = toString($item['value'], $depth);
                     $formattedLine = "{$prefixIndent}- {$key}: {$valueStr}";
                     break;
-                case 'unchanged':
+                case DIFF_STATUS_UNCHANGED:
                     $valueStr = toString($item['value'], $depth);
                     $formattedLine = "{$currentIndent}{$key}: {$valueStr}";
                     break;
-                case 'changed':
+                case DIFF_STATUS_CHANGED:
                     $oldValueStr = toString($item['oldValue'], $depth);
                     $newValueStr = toString($item['newValue'], $depth);
                     $removedLine = "{$prefixIndent}- {$key}: {$oldValueStr}";
                     $addedLine = "{$prefixIndent}+ {$key}: {$newValueStr}";
                     $formattedLine = "{$removedLine}\n{$addedLine}";
                     break;
-                case 'nested':
+                case DIFF_STATUS_NESTED:
                     $childrenLines = $iter($item['children'], $depth + 1);
                     $childrenStr = implode("\n", $childrenLines);
                     $formattedLine = "{$currentIndent}{$key}: {\n{$childrenStr}\n{$currentIndent}}";
